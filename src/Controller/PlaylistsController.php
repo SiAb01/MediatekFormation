@@ -49,12 +49,13 @@ class PlaylistsController extends AbstractController {
      * @Route("/playlists", name="playlists")
      * @return Response
      */
-    public function index(): Response{
-        $playlists = $this->playlistRepository->findAllOrderBy('name', 'ASC');
+    public function index(): Response{   
+        $playlists = $this->playlistRepository->findAllbyOrderAndCount('name', 'ASC');
         $categories = $this->categorieRepository->findAll();
         return $this->render( self::PAGE_PLAYLISTS, [
             'playlists' => $playlists,
-            'categories' => $categories
+            'categories' => $categories,
+           
         ]);
     }
 
@@ -65,12 +66,14 @@ class PlaylistsController extends AbstractController {
      * @return Response
      */
     public function sort($champ, $ordre): Response{
-        $playlists = $this->playlistRepository->findAllOrderBy($champ, $ordre);
+        $playlists = $this->playlistRepository->findAllbyOrderAndCount($champ, $ordre);
         $categories = $this->categorieRepository->findAll();
         return $this->render(self::PAGE_PLAYLISTS, [
             'playlists' => $playlists,
             'categories' => $categories
+
         ]);
+        
     }
     
     /**
@@ -108,4 +111,4 @@ class PlaylistsController extends AbstractController {
         ]);
     }
     
-}
+    }

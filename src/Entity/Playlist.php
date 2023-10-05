@@ -97,4 +97,13 @@ class Playlist
 
         return $this;
     }
+
+    /**
+     * Va retourner le nombre des formations
+     * 
+     */
+    public function getNumberOfFormations ()  : int
+    {
+       return $this->formations->count();
+    }
 }

@@ -60,6 +60,50 @@ class PlaylistRepository extends ServiceEntityRepository
                 ->getResult();       
     }
 
+
+
+/**
+ * Retourne les playlists leur catégories et le nombre de formations
+ *  @param type $champ
+ * @param type $ordre
+ * @return Playlist[]
+ */
+public function findAllbyOrderAndCount($champ, $ordre): array
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->select('p.id as id, p.name as name, COUNT(f) as numberOfFormations, c.name as categoriename')
+        ->join('p.formations', 'f')
+        ->leftJoin('f.categories', 'c')
+        ->groupBy('p.id, p.name, c.name');
+
+    if ($champ === 'numberOfFormations') {
+        $queryBuilder->orderBy('numberOfFormations', $ordre);
+    } else {
+        $queryBuilder->orderBy('p.' . $champ, $ordre);
+    }
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
+/**
+ * Récupérer une playlist avec son nbr fomrmation
+ */
+public function findOnePlaylist($playlistId)
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->select('p.id as playlistId,  COUNT(f) as numberOfFormations')
+        ->leftJoin('p.formations', 'f')
+        ->where('p.id = :playlistId')
+        ->setParameter('playlistId', $playlistId)
+        ->groupBy('p.id ');
+
+    return $queryBuilder->getQuery()->getArrayResult();
+}
+
+
+
+
+         
     /**
      * Enregistrements dont un champ contient une valeur
      * ou tous les enregistrements si la valeur est vide
@@ -101,11 +145,12 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->orderBy('p.name', 'ASC')
                     ->addOrderBy('c.name')
                     ->getQuery()
-                    ->getResult();              
+                    ->getResult();
             
-        }           
-    }    
+        }
+    }
 
 
-    
+
 }
+
