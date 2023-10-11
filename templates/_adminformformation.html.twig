@@ -1,0 +1,48 @@
+
+<h2 class="text-center">{{ formTitle }}</h2>
+
+
+
+{{ form_start(formFormation, {'attr': {'class': 'form'}}) }}
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            {{ form_label(formFormation.publishedAt, 'Date de publication', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formFormation.publishedAt, {'attr': {'class': 'form-control'}}) }}
+           
+        <div class="alert alert-danger list-unstyled" role="alert">
+            {{ form_errors(formFormation.publishedAt) }}
+        </div>
+
+
+        </div>
+        <div class="mb-3">
+            {{ form_label(formFormation.title, 'Titre', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formFormation.title, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(formFormation.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formFormation.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(formFormation.videoId, 'Lien de la vidéo', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formFormation.videoId, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    
+        <div class="mb-3">
+            {{ form_label(formFormation.playlist, 'Playlist', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formFormation.playlist, {'attr': {'class': 'form-check-input'}}) }}
+           
+        </div>
+    
+   <div class="mb-3">
+    {{ form_row(formFormation.categories) }}
+</div>
+     
+</div>
+   
+
+
+
+{{ form_end(formFormation) }}

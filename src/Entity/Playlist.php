@@ -106,4 +106,6 @@ class Playlist
     {
        return $this->formations->count();
     }
+
+    
 }
