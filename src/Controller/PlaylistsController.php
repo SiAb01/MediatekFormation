@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Playlist;
 use App\Repository\CategorieRepository;
 use App\Repository\FormationRepository;
 use App\Repository\PlaylistRepository;
@@ -114,4 +115,5 @@ class PlaylistsController extends AbstractController {
     }
     
 
-    }
+   
+}

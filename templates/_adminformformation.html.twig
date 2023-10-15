@@ -10,10 +10,11 @@
             {{ form_label(formFormation.publishedAt, 'Date de publication', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(formFormation.publishedAt, {'attr': {'class': 'form-control'}}) }}
            
-        <div class="alert alert-danger list-unstyled" role="alert">
-            {{ form_errors(formFormation.publishedAt) }}
-        </div>
-
+        {% if form_errors(formFormation.publishedAt) is not empty %}
+            <div class="alert alert-danger list-unstyled" role="alert">
+                {{ form_errors(formFormation.publishedAt) }}
+            </div>
+        {% endif %}
 
         </div>
         <div class="mb-3">

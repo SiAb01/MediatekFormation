@@ -72,7 +72,7 @@ public function findAllbyOrderAndCount($champ, $ordre): array
 {
     $queryBuilder = $this->createQueryBuilder('p')
         ->select('p.id as id, p.name as name, COUNT(f) as numberOfFormations, c.name as categoriename')
-        ->join('p.formations', 'f')
+        ->leftJoin('p.formations', 'f')
         ->leftJoin('f.categories', 'c')
         ->groupBy('p.id, p.name, c.name');
 
@@ -84,6 +84,7 @@ public function findAllbyOrderAndCount($champ, $ordre): array
 
     return $queryBuilder->getQuery()->getResult();
 }
+
 
 /**
  * Récupérer une playlist avec son nbr fomrmation
@@ -113,6 +114,13 @@ public function findOnePlaylist($playlistId)
      * @return Playlist[]
      */
     public function findByContainValue($champ, $valeur, $table=""): array{
+        // Sous-requete select qui récupère le nombre de formations
+        $subQueryBuilder = $this->createQueryBuilder('p_sub')
+        ->select('COUNT(f_sub)')
+        ->join('p_sub.formations', 'f_sub')
+        ->where('p_sub.id = p.id');
+        
+        
         if($valeur==""){
             return $this->findAllOrderBy('name', 'ASC');
         }    
@@ -121,6 +129,7 @@ public function findOnePlaylist($playlistId)
                     ->select('p.id id')
                     ->addSelect('p.name name')
                     ->addSelect('c.name categoriename')
+                    ->addSelect(['(' . $subQueryBuilder->getDQL() . ') AS numberOfFormations'])
                     ->join('p.formations', 'f')
                     ->leftjoin('f.categories', 'c')
                     ->where('p.'.$champ.' LIKE :valeur')
@@ -136,6 +145,7 @@ public function findOnePlaylist($playlistId)
                     ->select('p.id id')
                     ->addSelect('p.name name')
                     ->addSelect('c.name categoriename')
+                    ->addSelect(['(' . $subQueryBuilder->getDQL() . ') AS numberOfFormations'])
                     ->join('p.formations', 'f')
                     ->leftjoin('f.categories', 'c')
                     ->where('c.'.$champ.' LIKE :valeur')

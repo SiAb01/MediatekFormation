@@ -1,0 +1,26 @@
+<h2 class="text-center">{{ formTitle }}</h2>
+
+{{ form_start(formPlaylist, {'attr': {'class': 'form'}}) }}
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            {{ form_label(formPlaylist.name, 'Nom de la playlist', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formPlaylist.name, {'attr': {'class': 'form-control'}}) }}
+           {% if form_errors(formPlaylist.name) is not empty %}
+            <div class="alert alert-danger list-unstyled" role="alert">
+                {{ form_errors(formPlaylist.name) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form_label(formPlaylist.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formPlaylist.description, {'attr': {'class': 'form-control'}}) }}
+        </div>
+       
+
+    {{ form_end(formPlaylist) }}
+
+    
+
+
+
