@@ -4,6 +4,22 @@
 {% block body %}
  <h1 class="text-center"> Gestions des Formations</h1>
 
+<!--affichage des flashbag en cas d'erreur ou succées de la suppresion -->
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+  {% endfor %}
+
+  {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">
+            {{ message }}
+    </div>
+   {% endfor %}
+
+
+
+
  <table class="table table-striped">
     <caption>Un tableau qui répertorie toutes les formations</caption>
         <thead>

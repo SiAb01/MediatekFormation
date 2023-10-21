@@ -50,9 +50,30 @@ class CategorieRepository extends ServiceEntityRepository
                 ->join('f.playlist', 'p')
                 ->where('p.id=:id')
                 ->setParameter('id', $idPlaylist)
-                ->orderBy('c.name', 'ASC')   
+                ->orderBy('c.name', 'ASC')
                 ->getQuery()
-                ->getResult();        
-    }    
+                ->getResult();
+    }
+
+
+/**
+ * Retourne toutes les formations d'une Catégorie
+ * @param mixed $idCategorie
+ *
+ * @return array
+ */
+public function findAllFormationsOfOneCategorie($idCategorie) : array{
+
+
+    return $this->createQueryBuilder('c')
+    ->select('c', 'f')
+    ->join('c.formations', 'f')
+    ->where('c.id = :idCategorie')
+    ->setParameter('idCategorie', $idCategorie)
+    ->getQuery()
+    ->getResult();
+}
+
+
 
 }

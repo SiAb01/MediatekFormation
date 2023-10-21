@@ -14,6 +14,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType ;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 
@@ -30,9 +32,11 @@ class FormationType extends AbstractType
           
         ])
 
-            ->add('title')
-            ->add('description', null)
-            ->add('videoId')
+            ->add('title', TextType::class , ['label'=>'Titre'])
+            ->add('description', TextareaType::class,['attr' => [
+                'rows' => 6,
+            ],])
+            ->add('videoId', TextType::class)
             ->add('playlist', EntityType::class,[
                 'class' => Playlist::class,
                 'choice_label' => 'name',
@@ -59,15 +63,13 @@ class FormationType extends AbstractType
     }
 
 
+public function configureOptions(OptionsResolver $resolver): void
+{
+    $resolver->setDefaults([
+        'data_class' => Formation::class,
+        'validation_groups' => ['add_formation'],
+    ]);
+}
 
 
-
-    
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Formation::class,
-        ]);
-    }
 }

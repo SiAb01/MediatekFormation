@@ -1,0 +1,62 @@
+{% extends "baseadmin.html.twig" %}
+{% block title %}Catégories{% endblock %}
+
+{% block body %}
+ <h1>Catégories</h1>
+
+ <!-- Zone apparition du form d'ajout -->
+    {% if showForm %}
+    {% include '_adminformcategories.html.twig' with {'formCategorie': formCategorie} %}
+    {% endif %}
+
+
+ <table class="table table-striped">
+    <thead>
+        <th class="text-left align-top" scope="col">
+        Catégories
+        </th>
+         <th class="text-left align-top" scope="col">
+        Formations lié
+        </th>
+         <th class="text-left align-top" scope="col">
+                  <a href ="{{path('admincategorie.add')}}"  class="btn btn-info"> Ajouter Catégories </a>
+        </th>
+        <th>
+        <!--affichage des flashbag en cas d'erreur ou succées de la suppresion -->
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                        {{ message }}
+                </div>
+            {% endfor %}
+        </th>
+        </thead>  
+       <tbody class="table-striped">
+    {% for categorie in categories %}
+        <tr class="align-middle">
+            <td class="text-info">
+                {{ categorie.name }}
+            </td>
+            <td>
+                {% for formation in  categorie.formations %}
+                    {{ formation.title }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{{ path('admincategorie.delete', {id: categorie.id}) }}" class="btn btn-danger btn-sm" onclick="return confirm('Etes-vous sûr de vouloir supprimer {{ categorie.name }} ?')">Supprimer</a>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
+
+
+
+ </table> 
+
+
+{% endblock %}

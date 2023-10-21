@@ -27,8 +27,10 @@ class Formation
     private $id;
 
     /**
+     * Création d'un groupe de validation add_formation pour appliquer la contrainte que lors d'un ajout
      * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\GreaterThanOrEqual("today", message="La date de publication ne peut pas être antérieure à la date d'aujourd'hui.")
+     * @Assert\NotBlank(groups={"add_formation"})
+     * @Assert\GreaterThanOrEqual("today", message="La date de publication ne peut pas être antérieure à la date d'aujourd'hui." , groups={"add_formation"})
      */
     private $publishedAt;
 

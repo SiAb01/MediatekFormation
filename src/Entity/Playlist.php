@@ -102,7 +102,7 @@ class Playlist
 
     /**
      * Va retourner le nombre des formations
-     * 
+     *
      */
     public function getNumberOfFormations ()  : int
     {

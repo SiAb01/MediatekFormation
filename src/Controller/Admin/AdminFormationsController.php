@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class AdminFormationsController extends AbstractController
 {
@@ -99,7 +99,9 @@ class AdminFormationsController extends AbstractController
 public function addFormation (Request $request) : Response {
 
 $formationadd = new Formation();
-$formFormation = $this->createForm(FormationType::class , $formationadd);
+
+$formFormation = $this->createForm(FormationType::class , $formationadd,
+[ 'validation_groups' => ['Default', 'add_formation']]);
 $formTitle = "Ajout d'une nouvelle formation";
 
 $formations = $this->formationRepository->findAll();
@@ -134,9 +136,12 @@ return $this->render(self::PAGE_ADMINFORMATION, [
  *  @Route("admin/formation/edit/{id}"  , name="adminformation.edit")
  * @return Response
  */
-public function edit(Formation $formationEdit, Request $request): Response{
+public function edit(Formation $formationEdit, Request $request ,FlashBagInterface $flashBag): Response{
       
-    $formFormation = $this->createForm(FormationType::class, $formationEdit);
+    $formFormation = $this->createForm(FormationType::class, $formationEdit,  [
+        'validation_groups' => ['Default']]);
+   
+
     $formations = $this->formationRepository->findAll();
     $categories = $this->categorieRepository->findAll();
     
@@ -146,6 +151,7 @@ public function edit(Formation $formationEdit, Request $request): Response{
 
     if($formFormation->isSubmitted() && $formFormation->isValid()){
        $this->formationRepository->add($formationEdit, true);
+       $flashBag->add('success', 'La formation a bien été modifiée ');
         return $this->redirectToRoute('app_admin_formations');
     }
 

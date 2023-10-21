@@ -1,0 +1,36 @@
+<h2 class="text-center">{{ formTitle }}</h2>
+ {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+  {% endfor %}
+
+{# Affichage des erreurs du champ "name" du formulaire #}
+{% if formCategorie.name.vars.errors|length > 0 %}
+    <div class="alert alert-danger">
+        {% for error in formCategorie.name.vars.errors %}
+            {{ error.message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">
+            {{ message }}
+    </div>
+   {% endfor %}
+
+
+{{ form_start(formCategorie, {'attr': {'class': 'form'}}) }}
+  
+  
+  
+  <div class="mb-3">
+            {{ form_label(formCategorie.name, 'Nom de la Catégorie', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(formCategorie.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+
+        </div>
+
+{{ form_end(formCategorie) }}

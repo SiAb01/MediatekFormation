@@ -5,6 +5,12 @@
         {{ message }}
     </div>
   {% endfor %}
+  {% for message in app.flashes('error') %}
+    <div class="alert alert-danger">
+            {{ message }}
+    </div>
+   {% endfor %}
+
 {% include '_adminformplaylist.html.twig' with  {'formPlaylist' : formPlaylist} %} 
  {% endblock %}
 

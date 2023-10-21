@@ -6,9 +6,12 @@ use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=CategorieRepository::class)
+ * @UniqueEntity(fields={"name"}, message="Cette catégorie '{{ value }}' existe déjà.")
  */
 class Categorie
 {
@@ -20,12 +23,14 @@ class Categorie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true )
      */
+     
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="categories")
+     * 
      */
     private $formations;
 
@@ -44,6 +49,8 @@ class Categorie
         return $this->name;
     }
 
+
+
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -57,6 +64,10 @@ class Categorie
     public function getFormations(): Collection
     {
         return $this->formations;
+    }
+
+    public function getcountformations() : int {
+        return $this->formations->count();
     }
 
     public function addFormation(Formation $formation): self
