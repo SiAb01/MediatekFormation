@@ -29,6 +29,7 @@ class AdminFormationsController extends AbstractController
     private $categorieRepository;
 
     const PAGE_ADMINFORMATION = "\admin\admin_formations\admin_formation.html.twig";
+    const ROUTE_ADMINFORMATION = "app_admin_formations";
   
     
     public function __construct(FormationRepository $formationRepository, CategorieRepository $categorieRepository) {
@@ -76,6 +77,9 @@ class AdminFormationsController extends AbstractController
      * @return Response
      */
     public function findAllContain($champ, Request $request, $table=""): Response{
+    // On vérifie que le token reçu dans la requete correspond bien au meme qui a été généré pour effectuer l'action
+        if($this->isCsrfTokenValid('filtre_'.$champ, $request->get('_token'))){
+       
         $valeur = $request->get("recherche");
         $formations = $this->formationRepository->findByContainValue($champ, $valeur, $table);
         $categories = $this->categorieRepository->findAll();
@@ -86,6 +90,10 @@ class AdminFormationsController extends AbstractController
             'table' => $table,
             'showForm' => false
         ]);
+
+    }
+     return $this->redirectToRoute(self::ROUTE_ADMINFORMATION);
+
     }
     
 
@@ -112,6 +120,7 @@ $categories = $this->categorieRepository->findAll();
 $formFormation->handleRequest($request);
 
 if ($formFormation->isSubmitted() && $formFormation->isValid()) {
+    $this->cleanFormationProperties($formationadd);
     $this->formationRepository->add($formationadd, true);
    
     return $this->redirectToRoute('app_admin_formations');
@@ -150,9 +159,11 @@ public function edit(Formation $formationEdit, Request $request ,FlashBagInterfa
     $formFormation->handleRequest($request);
 
     if($formFormation->isSubmitted() && $formFormation->isValid()){
+      
+       $this->cleanFormationProperties($formationEdit);
        $this->formationRepository->add($formationEdit, true);
        $flashBag->add('success', 'La formation a bien été modifiée ');
-        return $this->redirectToRoute('app_admin_formations');
+       return $this->redirectToRoute('app_admin_formations');
     }
 
     return $this->render(self::PAGE_ADMINFORMATION, [
@@ -179,6 +190,22 @@ public function delete ( Formation $formationDelete ) :Response{
 $this->formationRepository->remove($formationDelete, true);
 return $this->redirectToRoute('app_admin_formations');
 
+}
+
+/**
+ * @param Formation $inputFormation
+ * Nettoyer les propriétes text title et description
+ * @return Formation
+ */
+private function cleanFormationProperties(Formation $inputFormation): Formation
+{
+    // Nettoyage des inputs de format texte pour la Formation
+    $cleanedTitle = filter_var($inputFormation->getTitle(), FILTER_SANITIZE_SPECIAL_CHARS);
+    $cleanedDescription = filter_var($inputFormation->getDescription(), FILTER_SANITIZE_SPECIAL_CHARS);
+    // Mettre à jour les propriétés de la Formation après nettoyage
+    $inputFormation->setDescription($cleanedDescription);
+    $inputFormation->setTitle($cleanedTitle);
+    return $inputFormation;
 }
 
 

@@ -84,7 +84,7 @@ public function addCategorie (Request $request , FlashBagInterface $flashBag) : 
     $formCategorie->handleRequest($request);
     
     if ($formCategorie->isSubmitted() && $formCategorie->isValid()) {
-      
+            $this->cleanCategorieProperties($categorieAdd);
             $this->categorieRepository->add($categorieAdd, true);
             $flashBag->add('success', 'La nouvelle catégorie a bien été ajoutée ');
             return $this->redirectToRoute('app_admin_categories');
@@ -128,6 +128,21 @@ public function addCategorie (Request $request , FlashBagInterface $flashBag) : 
     
 
 
+/**
+ * @param Categorie
+ *  $inputCategorie
+ * Nettoyer la propriéte name
+ * @return Categorie
+ * 
+ */
+private function cleanCategorieProperties(Categorie $inputCategorie): Categorie
 
+{
+    // Nettoyage des inputs de format texte pour la Categorie
+    $cleanedName = filter_var($inputCategorie->getName(), FILTER_SANITIZE_SPECIAL_CHARS);
+    // Mettre à jour les propriétés de la Categorie
+    $inputCategorie->setName($cleanedName);
+    return $inputCategorie;
+}
 
 }

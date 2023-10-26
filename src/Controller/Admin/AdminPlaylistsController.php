@@ -115,6 +115,7 @@ public function addPlaylist (Request $request , FlashBagInterface $flashBag) : R
     $formPlaylist->handleRequest($request);
     
     if ($formPlaylist->isSubmitted() && $formPlaylist->isValid()) {
+        $this->cleanPlaylistProperties($playlistAdd);
         $this->playlistRepository->add($playlistAdd, true);
         $flashBag->add('success', 'La nouvelle playlist a bien été ajoutée ');
        
@@ -147,6 +148,8 @@ public function addPlaylist (Request $request , FlashBagInterface $flashBag) : R
         $formTitle = "Modification de la playlist: " . $playlistEdit->getName();
         $formPlaylist->handleRequest($request);
          if ($formPlaylist->isSubmitted()  && $formPlaylist->isValid()){
+           
+           $this->cleanPlaylistProperties($playlistEdit);
            $this->playlistRepository->add($playlistEdit, true);
            $flashBag->add('success', 'La playlist a bien été modifiée ');
             return $this->redirectToRoute(self::ROUTE_ADMINPLAYLISTS);
@@ -170,11 +173,11 @@ public function addPlaylist (Request $request , FlashBagInterface $flashBag) : R
     public function delete (Playlist $playlistDeleted , FlashBagInterface $flashBag) : Response{
 
         $formations = $playlistDeleted->getNumberOfFormations();
-   if ($formations > 0){
-    $flashBag->add('error', 'La playlist ne peut pas être supprimée car elle a des formations associées.');
+        if ($formations > 0){
+            $flashBag->add('error', 'La playlist ne peut pas être supprimée car elle a des formations associées.');
 
-    return $this->redirectToRoute(self::ROUTE_ADMINPLAYLISTS);
-   }
+            return $this->redirectToRoute(self::ROUTE_ADMINPLAYLISTS);
+        }
 
    $this->playlistRepository->remove($playlistDeleted, true) ;
    $flashBag->add('success', 'La playlist a bien été supprimée avec succès.');
@@ -182,6 +185,23 @@ public function addPlaylist (Request $request , FlashBagInterface $flashBag) : R
 
     }
     
+     /**
+     * Nettoie les propriétés name et description d'une Playlist
+     *
+     * @param Playlist $playlist L'objet Playlist à nettoyer
+     * @return Playlist L'objet Playlist nettoyé
+     */
+    private function cleanPlaylistProperties(Playlist $inputPlaylist): Playlist
+    {
+         // Nettoyage des inputs de format texte pour Playlist
+        $cleanedName = filter_var($inputPlaylist->getName(), FILTER_SANITIZE_SPECIAL_CHARS);
+        $cleanedDescription = filter_var($inputPlaylist->getDescription(), FILTER_SANITIZE_SPECIAL_CHARS);
+          // Mettre à jour les propriétés de Playlist après nettoyage
+        $inputPlaylist->setDescription($cleanedDescription);
+        $inputPlaylist->setName($cleanedName);
+
+        return $inputPlaylist;
+    }
 
 
 
