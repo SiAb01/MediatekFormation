@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-namespace App\Controller\Admin;
+
 
 use App\Repository\PlaylistRepository;
 use App\Repository\CategorieRepository;
