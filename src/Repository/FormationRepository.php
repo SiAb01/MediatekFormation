@@ -99,13 +99,13 @@ class FormationRepository extends ServiceEntityRepository
                     ->orderBy('f.publishedAt', 'DESC')
                     ->setParameter('valeur', '%'.$valeur.'%')
                     ->getQuery()
-                    ->getResult(); 
+                    ->getResult();
         }
     }
     
     /**
      * Retourne les n formations les plus récentes
-     * @param type $nb
+     * @param type $nb 
      * @return Formation[]
      */
     public function findAllLasted($nb) : array {

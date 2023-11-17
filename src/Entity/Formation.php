@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=FormationRepository::class)
@@ -169,4 +170,38 @@ class Formation
 
         return $this;
     }
+
+     /**
+     * @Assert\Callback
+     * @param ExecutionContextInterface $context
+     */
+    public function validate(ExecutionContextInterface $context){
+        if (!$this->isPublishedAtIsValidate()){
+            $context->buildViolation("La date de publication est plus ancienne que la date du jour")
+            ->atPath('publishedAt')
+            ->addViolation();
+        }
+
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPublishedAtIsValidate () : bool { 
+    
+   
+
+     $publishedAt = $this->getPublishedAt();
+    
+     // Vérifiez si la date de publication est définie et qu'elle n'est pas postérieure à la date actuelle
+     if ($publishedAt instanceof \DateTime && $publishedAt <= new \DateTime()) {
+         return true; // La date de publication est valide
+     }
+     
+     return false; // La date de publication est postérieure à la date actuelle
+
+
+  
+    }
+
 }

@@ -8,6 +8,12 @@
 /var/
 /vendor/
 /translations/
+/.phpdoc/
+
+/tests/Controller/
+
+
+
 
 
 ###< symfony/framework-bundle ###

@@ -24,7 +24,19 @@ class CategorieRepositoryTest extends KernelTestCase {
         return $repository;
     }
 
-    public function findAllForOnePlaylist() {
+    /**
+     * @return [type]
+     */
+    public function testfindAllForOnePlaylist() {
+
+        $idPlaylist = 3 ;
+        //Chercher un tableau ou donnée attendue d'une playlist
+        $expectedPlaylistCategoriesFormationsCount = 4 ;
+        $repository= $this->recupCategorieRepository();
+        $repository->findAllForOnePlaylist($idPlaylist);
+
+
+        $this->assertCount($expectedPlaylistCategoriesFormationsCount, $repository->findAllForOnePlaylist($idPlaylist));
 
     }
 }
